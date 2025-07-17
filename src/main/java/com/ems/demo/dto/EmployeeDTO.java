@@ -1,22 +1,51 @@
 package com.ems.demo.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 public class EmployeeDTO {
-
-    @NotBlank
+    private Long id;
     private String name;
-
-    @Email
     private String email;
-
-    @NotNull
     private Long departmentId;
-
-    @NotNull
     private Long projectId;
 
-    // Getters and Setters
+    // Getters
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
 }

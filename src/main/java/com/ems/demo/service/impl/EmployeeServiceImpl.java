@@ -9,41 +9,92 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
+import com.ems.demo.dto.EmployeeDTO;
+import com.ems.demo.repository.DepartmentRepository;
+import com.ems.demo.repository.ProjectRepository;
+import com.ems.demo.entity.Department;
+import com.ems.demo.entity.Project;
+
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
     @Override
-    public Employee createEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeDTO createEmployee(EmployeeDTO dto) {
+        Department department = departmentRepository.findById(dto.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department", "id", dto.getDepartmentId()));
+
+        Project project = projectRepository.findById(dto.getProjectId())
+                .orElseThrow(() -> new ResourceNotFoundException("Project", "id", dto.getProjectId()));
+
+        Employee employee = new Employee();
+        employee.setName(dto.getName());
+        employee.setEmail(dto.getEmail());
+        employee.setDepartment(department);
+        employee.setProject(project);
+
+        Employee saved = employeeRepository.save(employee);
+        return mapToDTO(saved);
     }
 
     @Override
-    public Employee getEmployeeById(Long id) {
-        return employeeRepository.findById(id)
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeRepository.findAll().stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    @Override
+    public EmployeeDTO getEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+        return mapToDTO(employee);
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
-    }
+    public EmployeeDTO updateEmployee(Long id, EmployeeDTO dto) {
+        Employee existing = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
 
-    @Override
-    public Employee updateEmployee(Long id, Employee updatedEmployee) {
-        Employee employee = getEmployeeById(id);
-        employee.setName(updatedEmployee.getName());
-        employee.setEmail(updatedEmployee.getEmail());
-        employee.setDepartment(updatedEmployee.getDepartment());
-        employee.setProject(updatedEmployee.getProject());
-        return employeeRepository.save(employee);
+        existing.setName(dto.getName());
+        existing.setEmail(dto.getEmail());
+
+        Department department = departmentRepository.findById(dto.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department", "id", dto.getDepartmentId()));
+
+        Project project = projectRepository.findById(dto.getProjectId())
+                .orElseThrow(() -> new ResourceNotFoundException("Project", "id", dto.getProjectId()));
+
+        existing.setDepartment(department);
+        existing.setProject(project);
+
+        return mapToDTO(employeeRepository.save(existing));
     }
 
     @Override
     public void deleteEmployee(Long id) {
-        Employee employee = getEmployeeById(id);
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
         employeeRepository.delete(employee);
+    }
+
+    private EmployeeDTO mapToDTO(Employee emp) {
+        EmployeeDTO dto = new EmployeeDTO();
+        dto.setId(emp.getId());
+        dto.setName(emp.getName());
+        dto.setEmail(emp.getEmail());
+        dto.setDepartmentId(emp.getDepartment().getId());
+        dto.setProjectId(emp.getProject().getId());
+        return dto;
     }
 }
