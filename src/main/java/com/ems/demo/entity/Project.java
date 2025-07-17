@@ -1,9 +1,10 @@
-package com.ems.demo.model;
+package com.ems.demo.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
-public class Employee {
+public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,29 +12,24 @@ public class Employee {
 
     private String name;
 
-    private String email;
+    // Many employees can work on the same project
+    @OneToMany(mappedBy = "project")
+    private List<Employee> employees;
 
+    // Each project belongs to one department
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
-
     // Constructors
-    public Employee() {
-    }
+    public Project() {}
 
-    public Employee(String name, String email, Department department, Project project) {
+    public Project(String name, Department department) {
         this.name = name;
-        this.email = email;
         this.department = department;
-        this.project = project;
     }
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -46,12 +42,12 @@ public class Employee {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public List<Employee> getEmployees() {
+        return employees;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 
     public Department getDepartment() {
@@ -60,13 +56,5 @@ public class Employee {
 
     public void setDepartment(Department department) {
         this.department = department;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 }

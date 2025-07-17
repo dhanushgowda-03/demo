@@ -1,4 +1,4 @@
-package com.ems.demo.model;
+package com.ems.demo.entity;
 
 import jakarta.persistence.*;
 import java.util.List;
