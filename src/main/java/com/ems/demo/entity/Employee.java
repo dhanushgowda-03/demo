@@ -13,6 +13,12 @@ public class Employee {
 
     private String email;
 
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
@@ -61,6 +67,15 @@ public class Employee {
     public void setDepartment(Department department) {
         this.department = department;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 
     public Project getProject() {
         return project;

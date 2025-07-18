@@ -42,4 +42,9 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping
+    public ResponseEntity<EmployeeDTO> moveEmployee(@PathVariable Long id,@Valid @RequestBody EmployeeDTO dto) {
+        return ResponseEntity.ok(employeeService.moveEmployeeDept(id, dto));
+    }
 }

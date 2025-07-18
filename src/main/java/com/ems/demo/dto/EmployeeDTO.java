@@ -6,6 +6,12 @@ public class EmployeeDTO {
     private String email;
     private Long departmentId;
     private Long projectId;
+    private String username;
+    private String password;
+// + add getter/setter
+
+// + add getter/setter
+
 
     // Getters
     public Long getId() {
@@ -26,6 +32,14 @@ public class EmployeeDTO {
 
     public Long getProjectId() {
         return projectId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     // Setters
