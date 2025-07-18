@@ -7,11 +7,9 @@ public class EmployeeDTO {
     private Long departmentId;
     private Long projectId;
     private String username;
+
+    // Optional: Include password only if needed (e.g., during registration)
     private String password;
-// + add getter/setter
-
-// + add getter/setter
-
 
     // Getters
     public Long getId() {
@@ -34,12 +32,12 @@ public class EmployeeDTO {
         return projectId;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUsername() {
+        return username;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getPassword() {
+        return password;
     }
 
     // Setters
@@ -61,5 +59,13 @@ public class EmployeeDTO {
 
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

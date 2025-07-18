@@ -43,8 +43,10 @@ public class EmployeeController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping
-    public ResponseEntity<EmployeeDTO> moveEmployee(@PathVariable Long id,@Valid @RequestBody EmployeeDTO dto) {
-        return ResponseEntity.ok(employeeService.moveEmployeeDept(id, dto));
+    @PostMapping("/{id}/change-department/{newDeptId}")
+    public EmployeeDTO moveEmployeeToDepartment(@PathVariable Long id, @PathVariable Long newDeptId) {
+        return employeeService.moveEmployeeDept(id, newDeptId);
     }
+
+
 }

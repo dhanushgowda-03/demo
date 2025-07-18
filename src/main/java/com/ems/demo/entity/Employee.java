@@ -76,6 +76,16 @@ public class Employee {
         this.password = password;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    // Setter
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
 
     public Project getProject() {
         return project;

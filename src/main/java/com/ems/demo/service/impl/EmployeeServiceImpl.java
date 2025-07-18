@@ -22,10 +22,13 @@ import com.ems.demo.entity.Project;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private DepartmentRepository departmentRepository;
 
@@ -92,20 +95,20 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
         employeeRepository.delete(employee);
     }
-
     @Override
-    public EmployeeDTO moveEmployeeDept(Long id, EmployeeDTO dto) {
-        Employee existing = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+    public EmployeeDTO moveEmployeeDept(Long employeeId, Long newDepartmentId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee", "id", employeeId));
 
-        existing.setName(dto.getName());
-        existing.setEmail(dto.getEmail());
+        Department department = departmentRepository.findById(newDepartmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Department", "id", newDepartmentId));
 
-        Department department = departmentRepository.findById(dto.getDepartmentId())
-                .orElseThrow(() -> new ResourceNotFoundException("Department", "id", dto.getDepartmentId()));
-        existing.setDepartment(department);
-        return mapToDTO(employeeRepository.save(existing));
+        employee.setDepartment(department);
+        Employee updated = employeeRepository.save(employee);
+        return mapToDTO(updated);  // Make sure your `mapToDTO` method works correctly
     }
+
+
 
     private EmployeeDTO mapToDTO(Employee emp) {
         EmployeeDTO dto = new EmployeeDTO();
